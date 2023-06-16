@@ -18,6 +18,11 @@ video_url = st.text_input("Enter the YouTube video URL", "")
 
 # Output directory selection
 output_directory = st.text_input("Enter the output directory path", "")
+output_directory = st.text_input("Enter the output directory path", "")
+
+# Browse button to select output directory
+if st.button("Browse"):
+    output_directory = st.file_dialog("Select output directory", type=1)
 
 # Download button
 if st.button("Download"):
