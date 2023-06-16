@@ -16,18 +16,15 @@ st.title("YouTube Video Downloader")
 # Input fields
 video_url = st.text_input("Enter the YouTube video URL", key="video_url")
 
-# Output directory selection
-output_directory = st.text_input("Enter the output directory path", key="output_directory")
-
-# Browse button to select output directory
-if st.button("Browse"):
-    output_directory = st.file_dialog("Select output directory", type=1)
-
 # Download button
 if st.button("Download"):
-    if video_url and output_directory:
-        st.text("Downloading...")
-        result = download_video(video_url, output_directory)
-        st.text(result)
+    if video_url:
+        output_directory = st.sidebar.text_input("Enter the output directory path", key="output_directory")
+        if output_directory:
+            st.text("Downloading...")
+            result = download_video(video_url, output_directory)
+            st.text(result)
+        else:
+            st.sidebar.warning("Please provide an output directory path.")
     else:
-        st.warning("Please provide a video URL and output directory path.")
+        st.warning("Please provide a video URL.")
