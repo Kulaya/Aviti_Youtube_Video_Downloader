@@ -14,11 +14,10 @@ def download_video(url, output_path):
 st.title("YouTube Video Downloader")
 
 # Input fields
-video_url = st.text_input("Enter the YouTube video URL", "")
+video_url = st.text_input("Enter the YouTube video URL", key="video_url")
 
 # Output directory selection
-output_directory = st.text_input("Enter the output directory path", "")
-output_directory = st.text_input("Enter the output directory path", "")
+output_directory = st.text_input("Enter the output directory path", key="output_directory")
 
 # Browse button to select output directory
 if st.button("Browse"):
