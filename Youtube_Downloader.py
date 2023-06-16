@@ -17,14 +17,13 @@ st.title("YouTube Video Downloader")
 video_url = st.text_input("Enter the YouTube video URL", "")
 
 # Output directory selection
-output_directory = st.file_uploader("Select output directory", type=None, accept_folders=True)
+output_directory = st.text_input("Enter the output directory path", "")
 
 # Download button
 if st.button("Download"):
     if video_url and output_directory:
-        output_path = output_directory.name
         st.text("Downloading...")
-        result = download_video(video_url, output_path)
+        result = download_video(video_url, output_directory)
         st.text(result)
     else:
-        st.warning("Please provide a video URL and select an output directory.")
+        st.warning("Please provide a video URL and output directory path.")
