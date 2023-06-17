@@ -1,33 +1,21 @@
-import os
-import webbrowser
 import streamlit as st
 from pytube import YouTube
+import subprocess
 
 def download_video(url):
-    try:
-        st.text('Downloading...')
-        yt = YouTube(url)
-        stream = yt.streams.get_highest_resolution()
-        file_path = stream.download()
-        st.success('Download completed!')
-        return file_path
-    except Exception as e:
-        st.error(f'Download failed: {str(e)}')
+    st.write("Downloading...")
+    yt = YouTube(url)
+    video = yt.streams.get_highest_resolution()
+    video.download()
+    st.write("Download completed!")
 
-def main():
-    st.title('YouTube Video Downloader')
-    st.write('Enter the URL of the YouTube video you want to download:')
-    
-    url = st.text_input('URL')
-    
-    if st.button('Download'):
-        if url:
-            file_path = download_video(url)
-            if file_path:
-                st.success('Download completed!')
-                st.text(f'Downloaded video path: {file_path}')
-        else:
-            st.warning('Please enter a valid YouTube video URL.')
+    # Open the downloaded video automatically
+    subprocess.run(["open", video.default_filename])
 
-if __name__ == '__main__':
-    main()
+st.title("YouTube Video Downloader")
+
+# Get the YouTube video URL from the user
+url = st.text_input("Enter the YouTube video URL:")
+if url:
+    if st.button("Download"):
+        download_video(url)
