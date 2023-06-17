@@ -1,6 +1,6 @@
 import streamlit as st
 from pytube import YouTube
-import subprocess
+import webbrowser
 
 def download_video(url):
     st.write("Downloading...")
@@ -10,7 +10,7 @@ def download_video(url):
     st.write("Download completed!")
 
     # Open the downloaded video automatically
-    subprocess.run(["open", video.default_filename])
+    webbrowser.open(video.default_filename)
 
 st.title("YouTube Video Downloader")
 
