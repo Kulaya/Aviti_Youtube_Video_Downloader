@@ -1,8 +1,7 @@
 import streamlit as st
 import pytube
 import os
-import tkinter as tk
-from tkinter import filedialog
+from streamlit_bokeh_events import streamlit_bokeh_events
 
 def download_video(url, path):
     try:
@@ -27,12 +26,12 @@ def main():
 
     # Browse folder
     if browse_button:
-        root = tk.Tk()
-        root.withdraw()
-        folder_selected = filedialog.askdirectory()
-        root.destroy()
-        if folder_selected:
-            download_path = folder_selected
+        result = streamlit_bokeh_events(key="folder_browsing", events="FOLDER")
+        if result:
+            if "folder_browsing" in result:
+                folder_selected = result["folder_browsing"]["selected_folder"]
+                if folder_selected:
+                    download_path = folder_selected
 
     # Download button
     if st.button("Download"):
