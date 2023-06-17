@@ -19,7 +19,7 @@ def main():
     url = st.text_input("Enter YouTube Video URL", "")
 
     # Download location
-    download_path = st.sidebar.file_uploader("Select download location", type="directory")
+    download_path = st.sidebar.file_input("Select download location", accept_multiple_files=False, type="folder")
 
     # Download button
     if st.button("Download"):
@@ -27,7 +27,7 @@ def main():
             # Show loading spinner
             with st.spinner("Downloading..."):
                 # Get the selected path
-                path = os.path.abspath(download_path.name)
+                path = os.path.abspath(download_path)
                 # Download the video
                 download_video(url, path)
                 # Clear the spinner
