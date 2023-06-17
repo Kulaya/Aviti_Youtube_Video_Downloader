@@ -14,13 +14,6 @@ def download_video(url):
     except Exception as e:
         st.error(f'Download failed: {str(e)}')
 
-def open_file_location(file_path):
-    try:
-        file_dir = os.path.dirname(file_path)
-        webbrowser.open(file_dir)
-    except Exception as e:
-        st.error(f'Error opening file location: {str(e)}')
-
 def main():
     st.title('YouTube Video Downloader')
     st.write('Enter the URL of the YouTube video you want to download:')
@@ -32,8 +25,7 @@ def main():
             file_path = download_video(url)
             if file_path:
                 st.success('Download completed!')
-                if st.button('Open Downloaded Video'):
-                    open_file_location(file_path)
+                st.text(f'Downloaded video path: {file_path}')
         else:
             st.warning('Please enter a valid YouTube video URL.')
 
