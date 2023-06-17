@@ -5,13 +5,7 @@ import platform
 import subprocess
 
 def open_video(video_path):
-    system = platform.system()
-    if system == "Windows":
-        webbrowser.open(video_path)
-    elif system == "Darwin":  # macOS
-        subprocess.run(["open", video_path])
-    else:  # Linux
-        subprocess.run(["xdg-open", video_path])
+    subprocess.run(["xdg-open", video_path])
 
 def download_video(url):
     st.write("Downloading...")
