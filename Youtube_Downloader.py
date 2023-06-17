@@ -2,6 +2,7 @@ import streamlit as st
 from pytube import YouTube
 import webbrowser
 import platform
+import subprocess
 
 def open_video(video_path):
     system = platform.system()
