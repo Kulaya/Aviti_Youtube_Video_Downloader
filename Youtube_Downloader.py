@@ -19,10 +19,11 @@ video_url = st.text_input("Enter the YouTube video URL", key="video_url")
 
 # Output directory selection
 output_directory = st.sidebar.empty()
+output_directory_path = None  # Initialize the output directory path variable
 
 # Browse button
 if st.sidebar.button("Browse"):
-    output_directory_path = st.sidebar.file_uploader("Select output directory", type=None, accept_multiple_files=False)
+    output_directory_path = st.sidebar.file_uploader("Select output directory", type=None, accept_folders=True)
     if output_directory_path is not None:
         output_directory_path = os.path.abspath(output_directory_path.name)
         output_directory.info(f"Output directory: {output_directory_path}")
