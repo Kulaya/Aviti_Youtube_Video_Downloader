@@ -1,7 +1,6 @@
 import streamlit as st
 import pytube
 import os
-import PySimpleGUI as sg
 
 def download_video(url, path):
     try:
@@ -22,14 +21,6 @@ def main():
     # Download location
     st.write("Select download location:")
     download_path = st.text_input("Folder path", "")
-    browse_button = st.button("Browse")
-
-    # Browse folder
-    if browse_button:
-        sg.theme("LightGrey1")
-        folder_selected = sg.popup_get_folder("Select download location", no_window=True)
-        if folder_selected:
-            download_path = folder_selected
 
     # Download button
     if st.button("Download"):
