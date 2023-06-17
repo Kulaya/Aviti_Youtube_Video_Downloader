@@ -22,8 +22,7 @@ output_directory = st.sidebar.empty()
 
 # Browse button
 if st.sidebar.button("Browse"):
-    output_directory_path = st.sidebar.file_uploader("Select output directory", type=None, key="output_directory", 
-                                                     accept_multiple_files=False, key="output_directory")
+    output_directory_path = st.sidebar.file_uploader("Select output directory", type=None, accept_multiple_files=False)
     if output_directory_path is not None:
         output_directory_path = os.path.abspath(output_directory_path.name)
         output_directory.info(f"Output directory: {output_directory_path}")
