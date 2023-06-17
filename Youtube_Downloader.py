@@ -5,7 +5,7 @@ import platform
 import subprocess
 
 def open_video(video_path):
-    subprocess.run(["xdg-open", video_path])
+    subprocess.run(["gio", "open", video_path])
 
 def download_video(url):
     st.write("Downloading...")
