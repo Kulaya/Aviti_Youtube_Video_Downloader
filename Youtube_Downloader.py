@@ -1,7 +1,7 @@
 import streamlit as st
 import pytube
 import os
-from streamlit_bokeh_events import streamlit_bokeh_events
+import PySimpleGUI as sg
 
 def download_video(url, path):
     try:
@@ -26,12 +26,10 @@ def main():
 
     # Browse folder
     if browse_button:
-        result = streamlit_bokeh_events(key="folder_browsing", events="FOLDER")
-        if result:
-            if "folder_browsing" in result:
-                folder_selected = result["folder_browsing"]["selected_folder"]
-                if folder_selected:
-                    download_path = folder_selected
+        sg.theme("LightGrey1")
+        folder_selected = sg.popup_get_folder("Select download location", no_window=True)
+        if folder_selected:
+            download_path = folder_selected
 
     # Download button
     if st.button("Download"):
