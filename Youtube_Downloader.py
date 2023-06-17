@@ -1,6 +1,8 @@
 import streamlit as st
 import pytube
 import os
+import tkinter as tk
+from tkinter import filedialog
 
 def download_video(url, path):
     try:
@@ -21,11 +23,16 @@ def main():
     # Download location
     st.write("Select download location:")
     download_path = st.text_input("Folder path", "")
-    folder_button = st.button("Browse")
+    browse_button = st.button("Browse")
 
     # Browse folder
-    if folder_button:
-        download_path = st.select_folder()
+    if browse_button:
+        root = tk.Tk()
+        root.withdraw()
+        folder_selected = filedialog.askdirectory()
+        root.destroy()
+        if folder_selected:
+            download_path = folder_selected
 
     # Download button
     if st.button("Download"):
