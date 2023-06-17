@@ -2,7 +2,6 @@ import streamlit as st
 import pytube
 import threading
 import os
-from tkinter import Tk, filedialog
 
 def download_video(url, path):
     try:
@@ -14,13 +13,6 @@ def download_video(url, path):
     except Exception as e:
         st.write("An error occurred:", str(e))
 
-def get_download_location():
-    root = Tk()
-    root.withdraw()
-    folder_selected = filedialog.askdirectory()
-    root.destroy()
-    return folder_selected
-
 def main():
     st.title("YouTube Video Downloader")
 
@@ -30,7 +22,7 @@ def main():
     # Download button
     if st.button("Download"):
         # Get download location
-        path = get_download_location()
+        path = st.file_picker(label="Select download location", type=["directory"])
         if path:
             # Create a separate thread for downloading
             download_thread = threading.Thread(target=download_video, args=(url, path))
