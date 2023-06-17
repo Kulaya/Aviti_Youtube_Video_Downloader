@@ -1,6 +1,5 @@
 import streamlit as st
 import pytube
-import threading
 import os
 
 def download_video(url, path):
@@ -24,9 +23,12 @@ def main():
         # Get download location
         path = st.file_picker(label="Select download location", type=["directory"])
         if path:
-            # Create a separate thread for downloading
-            download_thread = threading.Thread(target=download_video, args=(url, path))
-            download_thread.start()
+            # Show loading spinner
+            with st.spinner("Downloading..."):
+                # Download the video
+                download_video(url, path)
+                # Clear the spinner
+                st.spinner()
 
 if __name__ == '__main__':
     main()
