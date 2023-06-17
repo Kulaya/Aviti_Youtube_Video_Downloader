@@ -1,6 +1,16 @@
 import streamlit as st
 from pytube import YouTube
-import os
+import webbrowser
+import platform
+
+def open_video(video_path):
+    system = platform.system()
+    if system == "Windows":
+        webbrowser.open(video_path)
+    elif system == "Darwin":  # macOS
+        subprocess.run(["open", video_path])
+    else:  # Linux
+        subprocess.run(["xdg-open", video_path])
 
 def download_video(url):
     st.write("Downloading...")
@@ -10,8 +20,7 @@ def download_video(url):
     st.write("Download completed!")
 
     # Open the downloaded video automatically
-    file_path = os.path.join(os.getcwd(), video.default_filename)
-    os.startfile(file_path)
+    open_video(video.default_filename)
 
 st.title("YouTube Video Downloader")
 
