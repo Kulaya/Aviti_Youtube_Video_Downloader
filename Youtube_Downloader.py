@@ -11,11 +11,10 @@ def open_video(video_path):
         opener = "open" if system == "Darwin" else "xdg-open"
         os.system(f"{opener} {video_path}")
 
-def download_video(url):
+def download_video(url, download_path):
     st.write("Downloading...")
     yt = YouTube(url)
     video = yt.streams.get_highest_resolution()
-    download_path = os.path.join(os.path.expanduser('~'), "Downloads")
     video_path = os.path.join(download_path, video.default_filename)
     video.download(output_path=download_path)
     st.write("Download completed!")
@@ -29,4 +28,10 @@ st.title("YouTube Video Downloader")
 url = st.text_input("Enter the YouTube video URL:")
 if url:
     if st.button("Download"):
-        download_video(url)
+        # Select the download location using a file dialog
+        download_path = st.sidebar.selectbox("Select download location", os.listdir(path=os.path.expanduser("~")))
+        if download_path:
+            download_path = os.path.join(os.path.expanduser("~"), download_path)
+            download_video(url, download_path)
+        else:
+            st.warning("No download location selected.")
