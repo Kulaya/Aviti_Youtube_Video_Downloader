@@ -1,33 +1,21 @@
-import os
-import webbrowser
-import streamlit as st
+import argparse
 from pytube import YouTube
 
-def download_video(url):
-    try:
-        st.text('Downloading...')
-        yt = YouTube(url)
-        stream = yt.streams.get_highest_resolution()
-        file_path = stream.download()
-        st.success('Download completed!')
-        return file_path
-    except Exception as e:
-        st.error(f'Download failed: {str(e)}')
+def download_video(url, download_path):
+    print("Downloading...")
+    yt = YouTube(url)
+    video = yt.streams.get_highest_resolution()
+    video.download(output_path=download_path)
+    print("Download completed!")
 
 def main():
-    st.title('YouTube Video Downloader')
-    st.write('Enter the URL of the YouTube video you want to download:')
-    
-    url = st.text_input('URL')
-    
-    if st.button('Download'):
-        if url:
-            file_path = download_video(url)
-            if file_path:
-                st.success('Download completed!')
-                st.text(f'Downloaded video path: {file_path}')
-        else:
-            st.warning('Please enter a valid YouTube video URL.')
+    parser = argparse.ArgumentParser(description="YouTube Video Downloader")
+    parser.add_argument("url", help="YouTube video URL")
+    parser.add_argument("download_path", help="Download location")
 
-if __name__ == '__main__':
+    args = parser.parse_args()
+
+    download_video(args.url, args.download_path)
+
+if __name__ == "__main__":
     main()
