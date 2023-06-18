@@ -1,21 +1,32 @@
-import argparse
+import streamlit as st
 from pytube import YouTube
+import webbrowser
+import os
 
-def download_video(url, download_path):
-    print("Downloading...")
+def open_video(video_path):
+    system = os.name
+    if system == "nt":  # Windows
+        os.startfile(video_path)
+    elif system == "posix":  # macOS or Linux
+        opener = "open" if system == "Darwin" else "xdg-open"
+        os.system(f"{opener} {video_path}")
+
+def download_video(url):
+    st.write("Downloading...")
     yt = YouTube(url)
     video = yt.streams.get_highest_resolution()
+    download_path = os.path.join(os.path.expanduser('~'), "Downloads")
+    video_path = os.path.join(download_path, video.default_filename)
     video.download(output_path=download_path)
-    print("Download completed!")
+    st.write("Download completed!")
 
-def main():
-    parser = argparse.ArgumentParser(description="YouTube Video Downloader")
-    parser.add_argument("url", help="YouTube video URL")
-    parser.add_argument("download_path", help="Download location")
+    # Open the downloaded video automatically
+    open_video(video_path)
 
-    args = parser.parse_args()
+st.title("YouTube Video Downloader")
 
-    download_video(args.url, args.download_path)
-
-if __name__ == "__main__":
-    main()
+# Get the YouTube video URL from the user
+url = st.text_input("Enter the YouTube video URL:")
+if url:
+    if st.button("Download"):
+        download_video(url)
