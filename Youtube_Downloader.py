@@ -1,7 +1,7 @@
 import streamlit as st
 from pytube import YouTube
 import os
-import subprocess
+import webbrowser
 
 def download_video(url, download_path):
     st.write("Downloading...")
@@ -16,10 +16,7 @@ def download_video(url, download_path):
     open_video(video_path)
 
 def open_video(video_path):
-    if os.name == "nt":  # Windows
-        os.startfile(video_path)
-    elif os.name == "posix":  # macOS or Linux
-        subprocess.run(["xdg-open", video_path])
+    webbrowser.open(video_path)
 
 st.title("YouTube Video Downloader")
 
