@@ -28,10 +28,20 @@ st.title("YouTube Video Downloader")
 url = st.text_input("Enter the YouTube video URL:")
 if url:
     if st.button("Download"):
+        # Get the list of directories in the user's home directory
+        directory_list = os.listdir(path=os.path.expanduser("~"))
+        
+        # Prepend "Downloads" to the directory list
+        directory_list.insert(0, "Downloads")
+        
         # Select the download location using a file dialog
-        download_path = st.sidebar.selectbox("Select download location", os.listdir(path=os.path.expanduser("~")))
+        download_path = st.sidebar.selectbox("Select download location", directory_list)
         if download_path:
-            download_path = os.path.join(os.path.expanduser("~"), download_path)
+            if download_path == "Downloads":
+                download_path = os.path.join(os.path.expanduser("~"), "Downloads")
+            else:
+                download_path = os.path.join(os.path.expanduser("~"), download_path)
+                
             download_video(url, download_path)
         else:
             st.warning("No download location selected.")
