@@ -10,9 +10,13 @@ def download_video(url, download_path):
     video.download(output_path=download_path)
     st.write("Download completed!")
 
-    # Display link to the downloaded video
-    st.write("Click the link below to open the downloaded video:")
-    st.markdown(f"[Downloaded Video]({video_path})")
+    # Display button to open the downloaded video
+    st.write("Click the button below to open the downloaded video:")
+    if st.button("Open Video"):
+        open_video(video_path)
+
+def open_video(video_path):
+    os.startfile(video_path)  # For Windows
 
 st.title("YouTube Video Downloader")
 
