@@ -4,12 +4,7 @@ import webbrowser
 import os
 
 def open_video(video_path):
-    system = os.name
-    if system == "nt":  # Windows
-        os.startfile(video_path)
-    elif system == "posix":  # macOS or Linux
-        opener = "open" if system == "Darwin" else "xdg-open"
-        os.system(f"{opener} {video_path}")
+    webbrowser.open(video_path)
 
 def download_video(url, download_path):
     st.write("Downloading...")
@@ -30,10 +25,10 @@ if url:
     if st.button("Download"):
         # Get the list of directories in the user's home directory
         directory_list = os.listdir(path=os.path.expanduser("~"))
-        
+
         # Prepend "Downloads" to the directory list
         directory_list.insert(0, "Downloads")
-        
+
         # Select the download location using a file dialog
         download_path = st.sidebar.selectbox("Select download location", directory_list)
         if download_path:
@@ -41,7 +36,7 @@ if url:
                 download_path = os.path.join(os.path.expanduser("~"), "Downloads")
             else:
                 download_path = os.path.join(os.path.expanduser("~"), download_path)
-                
+
             download_video(url, download_path)
         else:
             st.warning("No download location selected.")
