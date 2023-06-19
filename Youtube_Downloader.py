@@ -1,6 +1,7 @@
 import streamlit as st
 from pytube import YouTube
 import os
+from streamlit_ace import st_ace
 
 # Set Streamlit app title and layout
 st.title("YouTube Video Downloader")
@@ -23,7 +24,13 @@ def download_video(url, download_path):
 video_url = st.sidebar.text_input("Enter YouTube video URL")
 
 # Download path selection
-download_path = st.sidebar.file_uploader("Select download folder", type="directory")
+download_path = st_ace(
+    "Select download folder",
+    height=200,
+    language="text",
+    theme="github",
+    key="download_path",
+)
 
 # Download button
 if st.sidebar.button("Download"):
