@@ -23,7 +23,11 @@ def download_video(url, download_path):
 video_url = st.sidebar.text_input("Enter YouTube video URL")
 
 # Download path selection
-download_path = st.sidebar.folder_selector("Select download folder")
+download_path = st.sidebar.file_picker("Select download folder", type=None)
+
+# Extract directory path from file path
+if download_path:
+    download_path = os.path.dirname(download_path)
 
 # Download button
 if st.sidebar.button("Download"):
