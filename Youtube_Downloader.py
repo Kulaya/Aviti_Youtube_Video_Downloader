@@ -20,11 +20,13 @@ def download_video(url, download_path):
 
 # User input for YouTube video URL and download path
 video_url = st.sidebar.text_input("Enter YouTube video URL")
-download_path = st.sidebar.text_input("Enter download path")
+
+# Download path selection
+download_path = st.sidebar.file_uploader("Select download path", type=None)
 
 # Download button
 if st.sidebar.button("Download"):
     if video_url and download_path:
-        download_video(video_url, download_path)
+        download_video(video_url, download_path.name)
     else:
-        st.warning("Please enter a valid YouTube video URL and download path.")
+        st.warning("Please enter a valid YouTube video URL and select a download path.")
