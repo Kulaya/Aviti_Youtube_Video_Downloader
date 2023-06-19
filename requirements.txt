@@ -1,1 +1,3 @@
-pytube
+Pillow==9.0.1
+streamlit==0.88.0
+pytube>=10.5.3
