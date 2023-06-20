@@ -1,8 +1,7 @@
 import streamlit as st
 from pytube import YouTube
 import os
-import tkinter as tk
-from tkinter import filedialog
+import tempfile
 
 # Set Streamlit app title and layout
 st.title("YouTube Video Downloader")
@@ -24,23 +23,17 @@ def download_video(url, download_path):
 # User input for YouTube video URL
 video_url = st.sidebar.text_input("Enter YouTube video URL")
 
-# Button for browsing folder location
-def browse_folder():
-    root = tk.Tk()
-    root.withdraw()
-    selected_folder = filedialog.askdirectory()
-    download_path_input.text(selected_folder)
-
-browse_button = st.sidebar.button("Browse")
-if browse_button:
-    browse_folder()
-
-# User input for download folder path
-download_path_input = st.sidebar.text_input("Enter download folder path")
+# File uploader for selecting the download folder path
+folder_path_file = st.sidebar.file_uploader(
+    "Upload a file containing the download folder path",
+    type=["txt"],
+    accept_multiple_files=False
+)
 
 # Download button
 if st.sidebar.button("Download"):
-    if video_url and download_path_input.value:
-        download_video(video_url, download_path_input.value)
+    if video_url and folder_path_file is not None:
+        folder_path = folder_path_file.getvalue().decode("utf-8").strip()
+        download_video(video_url, folder_path)
     else:
-        st.warning("Please enter a valid YouTube video URL and download folder path.")
+        st.warning("Please enter a valid YouTube video URL and select a download folder path.")
