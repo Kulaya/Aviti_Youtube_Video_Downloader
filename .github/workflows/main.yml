@@ -1,4 +1,4 @@
-name: Install Tkinter
+name: Streamlit Application
 
 on:
   push:
@@ -13,12 +13,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-tk tk
 
-      - name: Run your Streamlit application
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Streamlit application
         run: |
-          # Add the necessary command to run your Streamlit application here
           streamlit run Youtube_Downloader.py
