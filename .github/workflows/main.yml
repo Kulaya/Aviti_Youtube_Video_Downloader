@@ -21,3 +21,4 @@ jobs:
       - name: Run your Streamlit application
         run: |
           # Add the necessary command to run your Streamlit application here
+          streamlit run Youtube_Downloader.py
