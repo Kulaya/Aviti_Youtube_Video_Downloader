@@ -1,5 +1,5 @@
-   def main():
-       st.title("YouTube Video Downloader")
+def main():
+    st.title("YouTube Video Downloader")
        video_url = st.text_input("Enter the YouTube video URL:")
        download_button = st.button("Download")
 
