@@ -1,9 +1,9 @@
 def main():
     st.title("YouTube Video Downloader")
-       video_url = st.text_input("Enter the YouTube video URL:")
-       download_button = st.button("Download")
+    video_url = st.text_input("Enter the YouTube video URL:")
+    download_button = st.button("Download")
 
-       if download_button:
+    if download_button:
            if video_url:
                try:
                    st.write("Downloading...")
