@@ -1,25 +1,20 @@
 import streamlit as st
 import pytube
 import os
-import re
+from urllib.parse import urlparse, parse_qs
 from pathlib import Path
 
 # Set the Downloads folder path
 DOWNLOADS_PATH = Path.home() / "Downloads"
 
-# Extract video ID from YouTube URL using regex
+# Extract video ID from YouTube URL
 def extract_video_id(url):
-    regex_patterns = [
-        r"(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#].[^\s]*)|(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#]\/[^\s/$.?#]*\/[^\s]*)|(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#]\/[^\s]*)",
-        r"(?:https?:\/\/)?(?:www\.)?youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|watch&v=)(?P<id>[^&#?\/\s]{11})"
-    ]
-    video_id = None
-    for pattern in regex_patterns:
-        match = re.search(pattern, url)
-        if match and match.group("id"):
-            video_id = match.group("id")
-            break
-    return video_id
+    parsed_url = urlparse(url)
+    query_params = parse_qs(parsed_url.query)
+    video_id = query_params.get("v")
+    if video_id:
+        return video_id[0]
+    return None
 
 # Streamlit app
 def main():
@@ -33,7 +28,7 @@ def main():
             urls_list = video_urls.split("\n")
 
             for url in urls_list:
-                # Extract video ID from URL using regex
+                # Extract video ID from URL
                 video_id = extract_video_id(url)
 
                 if video_id:
