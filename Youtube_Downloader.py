@@ -19,7 +19,7 @@ def extract_video_id(url):
     video_id = None
     for pattern in regex_patterns:
         match = re.search(pattern, url)
-        if match:
+        if match and match.group(1):
             video_id = match.group(1)
             break
     return video_id
