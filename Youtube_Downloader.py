@@ -28,31 +28,35 @@ def extract_video_id(url):
 def main():
     st.title("YouTube Video Downloader")
 
-    # Input field for YouTube video URL
-    video_url = st.text_input("Enter YouTube Video URL")
+    # Input field for YouTube video URLs
+    video_urls = st.text_area("Enter YouTube Video URLs (one URL per line)", height=200)
 
     if st.button("Download"):
-        if video_url:
-            # Extract video ID from URL using regex
-            video_id = extract_video_id(video_url)
+        if video_urls:
+            urls_list = video_urls.split("\n")
 
-            if video_id:
-                # Download the video
-                try:
-                    st.text("Downloading...")
-                    yt = pytube.YouTube(video_id)
-                    stream = yt.streams.first()
-                    file_path = DOWNLOADS_PATH / stream.default_filename
-                    stream.download(output_path=str(DOWNLOADS_PATH))
+            for url in urls_list:
+                # Extract video ID from URL using regex
+                video_id = extract_video_id(url)
 
-                    st.success("Download complete!")
-                    st.text(f"Video saved to: {file_path}")
-                except Exception as e:
-                    st.error(f"An error occurred: {str(e)}")
-            else:
-                st.warning("Please enter a valid YouTube video URL.")
+                if video_id:
+                    # Download the video
+                    try:
+                        st.text(f"Downloading {url}...")
+                        yt = pytube.YouTube(video_id)
+                        stream = yt.streams.first()
+                        file_path = DOWNLOADS_PATH / stream.default_filename
+                        stream.download(output_path=str(DOWNLOADS_PATH))
+
+                        st.success(f"Download of {url} complete!")
+                        st.text(f"Video saved to: {file_path}")
+                    except Exception as e:
+                        st.error(f"An error occurred while downloading {url}: {str(e)}")
+                else:
+                    st.warning(f"Invalid YouTube video URL: {url}")
+
         else:
-            st.warning("Please enter a YouTube video URL.")
+            st.warning("Please enter at least one YouTube video URL.")
 
 # Run the Streamlit app
 if __name__ == "__main__":
