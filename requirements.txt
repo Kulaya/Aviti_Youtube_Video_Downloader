@@ -1,6 +1,2 @@
 streamlit 
 pytube
-streamlit_ace
-youtube-dl
-pathlib
-re
