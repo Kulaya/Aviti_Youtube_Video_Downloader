@@ -11,15 +11,12 @@ DOWNLOADS_PATH = Path.home() / "Downloads"
 def extract_video_id(url):
     regex_patterns = [
         r"(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#].[^\s]*)|(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#]\/[^\s/$.?#]*\/[^\s]*)|(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#]\/[^\s]*)",
-        r"(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/user\/\S+|\/videos|\/playlist(?:\?list=)(?:\S+)))|youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/user\/\S+|\/videos|\/playlist(?:\?list=)(?:\S+)))",
-        r"(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:music\.)?youtube\.com\/(?:(?:watch\?v=|v\/|embed\/|shorts\/)([^\s/?\.#]+))",
-        r"(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:music\.)?youtube\.com\/playlist\?(?:.*&)?list=([^\s/?\.#]+)",
-        r"(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:music\.)?youtube\.com\/user\/([^\s/?\.#]+)"
+        r"(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/.*[\/|\?|&]vi?=|youtube\.com\/v\/|youtube\.com\/embed\/|youtube\.com\/.*[\/|\?|&]v=|youtu\.be\/|youtube\.com\/.*[\/|\?|&]e\/|youtube\.com\/.*[\/|\?|&]list=)([^\s&]*)",
     ]
     video_id = None
     for pattern in regex_patterns:
         match = re.search(pattern, url)
-        if match and match.group(1):
+        if match and len(match.groups()) > 0:
             video_id = match.group(1)
             break
     return video_id
