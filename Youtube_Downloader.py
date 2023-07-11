@@ -1,60 +1,77 @@
 import streamlit as st
-import pytube
+from pytube import YouTube
 import os
 import re
-from pathlib import Path
 
-# Set the Downloads folder path
-DOWNLOADS_PATH = Path.home() / "Downloads"
+directory= 'downloads/'
+if not os.path.exists(directory):
+    os.makedirs(directory)
+    
+st.set_page_config(page_title="YTD ", page_icon="🚀", layout="wide", )     
+st.markdown(f"""
+            <style>
+            .stApp {{background-image: url("https://images.unsplash.com/photo-1516557070061-c3d1653fa646?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80"); 
+                     background-attachment: fixed;
+                     background-size: cover}}
+         </style>
+         """, unsafe_allow_html=True)
 
-# Extract video ID from YouTube URL using regex
-def extract_video_id(url):
-    regex_patterns = [
-        r"(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#].[^\s]*)|(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#]\/[^\s/$.?#]*\/[^\s]*)|(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#]\/[^\s]*)",
-        r"(?:https?:\/\/)?(?:www\.)?youtube\.com\/(?:.*(?:v|embed|shorts)\/|.*(?:watch|youtu\.be)\/?\?v=|.*(?:watch|youtu\.be)\/)(?P<id>[0-9A-Za-z_-]{11})"
-    ]
-    video_id = None
-    for pattern in regex_patterns:
-        match = re.search(pattern, url)
-        if match and match.group("id"):
-            video_id = match.group("id")
-            break
-    return video_id
+@st.cache(allow_output_mutation=True)
+def get_info(url):
+    yt = YouTube(url)
+    streams= yt.streams.filter(progressive= True, type= 'video')
+    details= {}
+    details["image"]= yt.thumbnail_url
+    details["streams"]= streams
+    details["title"]= yt.title
+    details["length"]= yt.length
+    itag, resolutions, vformat, frate = ([] for i in range(4))
+    for i in streams:
+        res= re.search(r'(\d+)p', str(i))
+        typ= re.search(r'video/(\w+)', str(i))
+        fps= re.search(r'(\d+)fps', str(i))
+        tag= re.search(r'(\d+)',str(i))
+        itag.append(str(i)[tag.start():tag.end()])
+        resolutions.append(str(i)[res.start():res.end()])
+        vformat.append(str(i)[typ.start():typ.end()])
+        frate.append(str(i)[fps.start():fps.end()])
+    details["resolutions"]= resolutions
+    details["itag"]= itag
+    details["fps"]= frate
+    details["format"]= vformat
+    return details
 
-# Streamlit app
-def main():
-    st.title("YouTube Video Downloader")
-
-    # Input field for YouTube video URLs
-    video_urls = st.text_area("Enter YouTube Video URLs (one URL per line)", height=200)
-
-    if st.button("Download"):
-        if video_urls:
-            urls_list = video_urls.split("\n")
-
-            for url in urls_list:
-                # Extract video ID from URL using regex
-                video_id = extract_video_id(url)
-
-                if video_id:
-                    # Download the video
-                    try:
-                        st.text(f"Downloading {url}...")
-                        yt = pytube.YouTube(video_id)
-                        stream = yt.streams.first()
-                        file_path = DOWNLOADS_PATH / stream.default_filename
-                        stream.download(output_path=str(DOWNLOADS_PATH))
-
-                        st.success(f"Download of {url} complete!")
-                        st.text(f"Video saved to: {file_path}")
-                    except Exception as e:
-                        st.error(f"An error occurred while downloading {url}: {str(e)}")
-                else:
-                    st.warning(f"Invalid YouTube video URL: {url}")
-
-        else:
-            st.warning("Please enter at least one YouTube video URL.")
-
-# Run the Streamlit app
-if __name__ == "__main__":
-    main()
+st.title("YouTube Downloader 🚀")
+url = st.text_input("Paste URL here 👇", placeholder='https://www.youtube.com/')
+if url:
+    v_info= get_info(url)
+    col1, col2= st.columns([1,1.5], gap="small")
+    with st.container():
+        with col1:            
+            st.image(v_info["image"])   
+        with col2:
+            st.subheader("Video Details ⚙️")
+            res_inp = st.selectbox('__Select Resolution__', v_info["resolutions"])
+            id = v_info["resolutions"].index(res_inp)            
+            st.write(f"__Title:__ {v_info['title']}")
+            st.write(f"__Length:__ {v_info['length']} sec")
+            st.write(f"__Resolution:__ {v_info['resolutions'][id]}")
+            st.write(f"__Frame Rate:__ {v_info['fps'][id]}")
+            st.write(f"__Format:__ {v_info['format'][id]}")
+            file_name = st.text_input('__Save as 🎯__', placeholder = v_info['title'])
+            if file_name:        
+                if file_name != v_info['title']:
+                    file_name+=".mp4"
+            else:
+                file_name = v_info['title'] + ".mp4" 
+                
+        button = st.button("Download ⚡️")
+        if button:
+            with st.spinner('Downloading...'):
+                try:
+                    ds = v_info["streams"].get_by_itag(v_info['itag'][id])
+                    ds.download(filename= file_name, output_path= "downloads/")
+                    st.success('Download Complete', icon="✅")       
+                    st.balloons()
+                except:
+                    st.error('Error: Save with a different name!', icon="🚨") 
