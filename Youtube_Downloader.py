@@ -11,7 +11,7 @@ DOWNLOADS_PATH = Path.home() / "Downloads"
 def extract_video_id(url):
     regex_patterns = [
         r"(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#].[^\s]*)|(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#]\/[^\s/$.?#]*\/[^\s]*)|(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#]\/[^\s]*)",
-        r"(?:https?:\/\/)?(?:www\.)?youtube\.com\/.*[?&]v=(?P<id>[A-Za-z0-9_-]{11})"
+        r"(?:https?:\/\/)?(?:www\.)?youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|watch&v=)(?P<id>[^&#?\/\s]{11})"
     ]
     video_id = None
     for pattern in regex_patterns:
