@@ -10,11 +10,11 @@ DOWNLOADS_PATH = Path.home() / "Downloads"
 # Extract video ID from YouTube URL using regex
 def extract_video_id(url):
     regex_patterns = [
-        r"(?<=youtu.be/|v/|u/|embed/|watch\?v=|&v=|embed\/|watch\?feature=player_embedded&v=|embed%\u200C\u200B2F|embed/\u200C\u200B?v=)([^#\&\?]*).*?(?=\?|\&|\#|$)",
-        r"(?<=youtu.be/|v/|u/|embed/|watch\?v=|&v=|embed\/|watch\?feature=player_embedded&v=|embed%\u200C\u200B2F|embed/\u200C\u200B?v=)([^#\&\?]*)(?=\?|\&|\#|$)",
-        r"(?<=watch\?v=|&v=)([^#\&\?]*)(?=\?|\&|\#|$)",
-        r"(?<=embed/)([^/\r\n\?]*)(?=\?|\&|\#|$)",
-        r"(?<=\bv\=)([a-zA-Z0-9_\-]+)"
+        r"(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#].[^\s]*)|(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#]\/[^\s/$.?#]*\/[^\s]*)|(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#]\/[^\s]*)",
+        r"(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/user\/\S+|\/videos|\/playlist(?:\?list=)(?:\S+)))|youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/user\/\S+|\/videos|\/playlist(?:\?list=)(?:\S+)))",
+        r"(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:music\.)?youtube\.com\/(?:(?:watch\?v=|v\/|embed\/|shorts\/)([^\s/?\.#]+))",
+        r"(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:music\.)?youtube\.com\/playlist\?(?:.*&)?list=([^\s/?\.#]+)",
+        r"(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:music\.)?youtube\.com\/user\/([^\s/?\.#]+)"
     ]
     video_id = None
     for pattern in regex_patterns:
