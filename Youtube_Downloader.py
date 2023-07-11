@@ -11,13 +11,13 @@ DOWNLOADS_PATH = Path.home() / "Downloads"
 def extract_video_id(url):
     regex_patterns = [
         r"(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#].[^\s]*)|(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#]\/[^\s/$.?#]*\/[^\s]*)|(?:https?:\/\/(?:www\.|m\.|music\.)?youtube\.com\/[^\s/$.?#]\/[^\s]*)",
-        r"(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/.*[\/|\?|&]vi?=|youtube\.com\/v\/|youtube\.com\/embed\/|youtube\.com\/.*[\/|\?|&]v=|youtu\.be\/|youtube\.com\/.*[\/|\?|&]e\/|youtube\.com\/.*[\/|\?|&]list=)([^\s&]*)",
+        r"(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|.*&v=|embed\/|v\/|shorts\/|.*\/videos\/))(?P<id>[A-Za-z0-9_-]{11})"
     ]
     video_id = None
     for pattern in regex_patterns:
         match = re.search(pattern, url)
-        if match and len(match.groups()) > 0:
-            video_id = match.group(1)
+        if match and match.group("id"):
+            video_id = match.group("id")
             break
     return video_id
 
