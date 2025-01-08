@@ -2,11 +2,11 @@ import streamlit as st
 import yt_dlp
 import os
 
-def download_video(url):
+def download_video(url, output_path):
+    """Download YouTube video to the specified output path."""
     try:
-        downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
         ydl_opts = {
-            'outtmpl': os.path.join(downloads_path, '%(title)s.%(ext)s')
+            'outtmpl': os.path.join(output_path, '%(title)s.%(ext)s')
         }
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
@@ -20,13 +20,22 @@ st.title("YouTube Video Downloader")
 # Input for the video URL
 video_url = st.text_input("Enter the YouTube video URL:")
 
+# Destination folder selection
+default_output_path = os.path.join(os.path.expanduser("~"), "Downloads")
+output_path = st.text_input(
+    "Enter the destination folder:", value=default_output_path
+)
+
 # Download button
 if st.button("Download Video"):
-    if video_url:
-        success, error_message = download_video(video_url)
-        if success:
-            st.success("Video downloaded successfully! Check your Downloads folder.")
+    if video_url.strip():
+        if os.path.isdir(output_path):
+            success, error_message = download_video(video_url, output_path)
+            if success:
+                st.success(f"Video downloaded successfully to {output_path}.")
+            else:
+                st.error(f"Failed to download video. Error: {error_message}")
         else:
-            st.error(f"Failed to download video. Error: {error_message}")
+            st.error("Invalid destination folder. Please enter a valid path.")
     else:
-        st.warning("Please enter a valid URL.")
+        st.error("Please enter a valid video URL.")
