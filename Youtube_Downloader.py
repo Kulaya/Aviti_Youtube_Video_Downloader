@@ -1,10 +1,17 @@
 import streamlit as st
 import yt_dlp
+from tkinter import Tk, filedialog
 
-def download_video(url):
-    # Specify a custom save directory
+def browse_destination():
+    root = Tk()
+    root.withdraw()  # Hide the main Tkinter window
+    folder_selected = filedialog.askdirectory(title="Select Destination Folder")
+    root.destroy()  # Close the Tkinter window
+    return folder_selected
+
+def download_video(url, destination):
     ydl_opts = {
-        'outtmpl': 'downloads/%(title)s.%(ext)s',  # Saves to 'downloads' folder with video title as filename
+        'outtmpl': f'{destination}/%(title)s.%(ext)s',  # Save to the selected destination folder
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
@@ -18,9 +25,14 @@ url = st.text_input("Enter YouTube video URL:")
 if st.button("Download Video"):
     if url:
         try:
-            st.info("Downloading... Please wait.")
-            download_video(url)
-            st.success("Video downloaded successfully!")
+            st.info("Please select the destination folder.")
+            destination = browse_destination()
+            if destination:
+                st.info("Downloading... Please wait.")
+                download_video(url, destination)
+                st.success(f"Video downloaded successfully to {destination}!")
+            else:
+                st.warning("Download canceled. No destination folder selected.")
         except Exception as e:
             st.error(f"An error occurred: {e}")
     else:
