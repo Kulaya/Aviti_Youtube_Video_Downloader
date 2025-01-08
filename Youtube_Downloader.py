@@ -1,13 +1,6 @@
 import streamlit as st
 import yt_dlp
-from tkinter import Tk, filedialog
-
-def browse_destination_folder():
-    root = Tk()
-    root.withdraw()  # Hide the root window
-    folder_selected = filedialog.askdirectory(title="Select Destination Folder")
-    root.destroy()  # Destroy the Tkinter root window
-    return folder_selected
+from pathlib import Path
 
 def download_video(url, output_path):
     try:
@@ -29,16 +22,19 @@ video_url = st.text_input("Enter the YouTube video URL:")
 # Download button
 if st.button("Download Video"):
     if video_url:
-        destination_folder = browse_destination_folder()
+        st.info("Please select the destination folder.")
+        destination_folder = st.text_input("Enter the destination folder path:")
         if destination_folder:
-            from pathlib import Path
             destination_path = Path(destination_folder)
-            success, error_message = download_video(video_url, destination_path)
-            if success:
-                st.success(f"Video downloaded successfully to {destination_folder}!")
+            if destination_path.exists() and destination_path.is_dir():
+                success, error_message = download_video(video_url, destination_path)
+                if success:
+                    st.success(f"Video downloaded successfully to {destination_folder}!")
+                else:
+                    st.error(f"Failed to download video. Error: {error_message}")
             else:
-                st.error(f"Failed to download video. Error: {error_message}")
+                st.error("The entered path is not a valid folder. Please try again.")
         else:
-            st.warning("No folder selected. Please select a destination folder.")
+            st.warning("No folder entered. Please enter a valid destination folder path.")
     else:
         st.warning("Please enter a valid URL.")
