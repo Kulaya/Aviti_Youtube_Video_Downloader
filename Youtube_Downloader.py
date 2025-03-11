@@ -51,7 +51,7 @@ if st.button("Download Video"):
         st.warning("Please enter a valid YouTube URL")
 
 st.write("Steps to use this App")
-st.write("1.Enter a YouTube URL, click 'Download Video', then use the 'Click to Save Video ' button to save it to your device.")
+st.write("1.Enter or paste a YouTube URL")
 st.write("2.then use the 'Click to Save Video ' button to save it to your device.")
 st.write("3. Browse location to download your video")
 st.write("4. Lastly your video will saved to your device")
