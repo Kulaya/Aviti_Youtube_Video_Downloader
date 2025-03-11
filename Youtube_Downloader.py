@@ -36,7 +36,7 @@ if st.button("Download Video"):
                 # Read the file as binary data
                 with open(downloaded_file, "rb") as file:
                     st.download_button(
-                        label="Click to Save Video Locally",
+                        label="Click to Save Video on your device",
                         data=file,
                         file_name=downloaded_file,
                         mime="video/mp4"  # Adjust MIME type as needed
@@ -50,4 +50,8 @@ if st.button("Download Video"):
     else:
         st.warning("Please enter a valid YouTube URL")
 
-st.write("Enter a YouTube URL, click 'Download Video', then use the 'Click to Save Video Locally' button to save it to your device.")
+st.write("Steps to use this App")
+st.write("1.Enter a YouTube URL, click 'Download Video', then use the 'Click to Save Video ' button to save it to your device.")
+st.write("2.then use the 'Click to Save Video ' button to save it to your device.")
+st.write("3. Browse location to download your video")
+st.write("4. Lastly your video will saved to your device")
