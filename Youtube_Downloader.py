@@ -1,50 +1,43 @@
 import streamlit as st
 import yt_dlp
-import os
-import platform
 
-if platform.system() == "Windows":
-    import ctypes.wintypes
-    from win32com.shell import shell, shellcon
-
-def browse_destination():
-    if platform.system() == "Windows":
-        folder_pidl = shell.SHBrowseForFolder(
-            0, None, "Select a folder", shellcon.BIF_RETURNONLYFSDIRS
-        )
-        if folder_pidl:
-            folder_path = shell.SHGetPathFromIDList(folder_pidl)
-            return folder_path.decode("utf-8") if isinstance(folder_path, bytes) else folder_path
-        return None
-    else:
-        st.warning("This feature is only supported on Windows.")
-        return None
-
-def download_video(url, destination):
-    ydl_opts = {
-        'outtmpl': os.path.join(destination, '%(title)s.%(ext)s'),  # Save to the selected destination folder
-    }
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([url])
-
-# Streamlit App Interface
+# Streamlit app title
 st.title("YouTube Video Downloader")
 
-# Input for YouTube video URL
-url = st.text_input("Enter YouTube video URL:")
+# Input field for the URL
+url = st.text_input("Enter video URL:", "")
 
+# Download button
 if st.button("Download Video"):
     if url:
         try:
-            st.info("Please select the destination folder.")
-            destination = browse_destination()
-            if destination:
-                st.info("Downloading... Please wait.")
-                download_video(url, destination)
-                st.success(f"Video downloaded successfully to {destination}!")
-            else:
-                st.warning("Download canceled. No destination folder selected.")
+            # Display a message to inform the user that download has started
+            st.write("Downloading... Please wait.")
+            
+            # yt_dlp options (keeping it empty as in the original code)
+            ydl_opts = {}
+            
+            # Download the video
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+            
+            # Success message
+            st.success("Video Downloaded Successfully!")
+            
+            # Note about file location
+            st.info("The video has been downloaded to your current working directory.")
+            
         except Exception as e:
-            st.error(f"An error occurred: {e}")
+            # Error handling
+            st.error(f"An error occurred: {str(e)}")
     else:
-        st.warning("Please enter a valid URL.")
+        st.warning("Please enter a valid YouTube URL")
+
+# Optional: Add some instructions
+st.write("""
+    Instructions:
+    1. Paste a YouTube video URL in the input field above
+    2. Click 'Download Video'
+    3. Wait for the download to complete
+    4. The video will be saved in the same directory as this script
+""")
